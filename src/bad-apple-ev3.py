@@ -18,7 +18,6 @@ ev3.screen.clear()
 ev3.speaker.set_volume(10)
 ev3.light.off()
 
-approx_audio_load_time = 24_000_000
 frame_count = 6572
 asset_directory = '/home/robot/bad-apple-ev3/assets/'
 frame_directory = asset_directory + 'frames/'
@@ -30,17 +29,16 @@ dt_offset = 3_000
 def play_audio():
     ev3.speaker.play_file(audio_directory + 'bad-apple-audio.wav')
 
-if __name__ == '__main__':
-    audio_thread = Thread(target=play_audio)
-    audio_thread.start()
-
-    print("Waiting for audio.")
-    sleep_us(approx_audio_load_time) # Wait for audio to load.
-    print("Starting.")
-
+def play_video():
     dt = int(video_length / frame_count)
     for i in range(1, (frame_count + 1) / fps_reduction):
         t1 = ticks_us()
         ev3.screen.load_image(frame_directory + 'frame%04d.png' % (i * fps_reduction))
         t2 = ticks_us()
         sleep_us(dt * fps_reduction - (t2 - t1) - dt_offset)
+
+if __name__ == '__main__':
+    video_thread = Thread(target=play_video)
+    video_thread.start()
+
+    play_audio()
