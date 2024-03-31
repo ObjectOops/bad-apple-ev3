@@ -1,24 +1,46 @@
 #!/usr/bin/env pybricks-micropython
 
-import time
+'''
+Calibrated at ~7.22 V.
+
+Start from the EV3 brick itself to avoid audio loading discrepancies.
+One may need to try multiple times before the audio is synced.
+'''
+
+from threading import Thread
+from time import ticks_us, sleep_us
 
 from pybricks.media.ev3dev import Image
 from pybricks.hubs import EV3Brick
-from pybricks.tools import wait
 
 ev3 = EV3Brick()
 ev3.screen.clear()
+ev3.speaker.set_volume(10)
+ev3.light.off()
 
+approx_audio_load_time = 24_000_000
 frame_count = 6572
-directory = '/home/robot/bad-apple-ev3/assets/frames/'
-video_length = 3 * 60 + 39 + 0.08
-dt_offset = 0.413
+asset_directory = '/home/robot/bad-apple-ev3/assets/'
+frame_directory = asset_directory + 'frames/'
+audio_directory = asset_directory + 'audio/'
+video_length = (3 * 60 + 39 + 0.08) * 1_000_000
+fps_reduction = 3
+dt_offset = 3_000
+
+def play_audio():
+    ev3.speaker.play_file(audio_directory + 'bad-apple-audio.wav')
 
 if __name__ == '__main__':
-    # We can't load a significant number of images into memory, so we'll try to do it one-by-one.
-    dt = video_length / frame_count
-    for i in range(1, frame_count + 1):
-        t1 = time.ticks_ms() # Slightly faster than the `StopWatch` API.
-        ev3.screen.load_image(directory + 'frame%04d.png' % i)
-        t2 = time.ticks_ms()
-        wait(dt - (t2 - t1) - dt_offset) # Higher precision (maybe) and less latency than `time.sleep_ms` due to not needing to cast.
+    audio_thread = Thread(target=play_audio)
+    audio_thread.start()
+
+    print("Waiting for audio.")
+    sleep_us(approx_audio_load_time) # Wait for audio to load.
+    print("Starting.")
+
+    dt = int(video_length / frame_count)
+    for i in range(1, (frame_count + 1) / fps_reduction):
+        t1 = ticks_us()
+        ev3.screen.load_image(frame_directory + 'frame%04d.png' % (i * fps_reduction))
+        t2 = ticks_us()
+        sleep_us(dt * fps_reduction - (t2 - t1) - dt_offset)
