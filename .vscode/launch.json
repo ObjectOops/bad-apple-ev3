@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Download and Run bad-apple-ev3",
+            "type": "ev3devBrowser",
+            "request": "launch",
+            "program": "/home/robot/${workspaceFolderBasename}/src/bad-apple-ev3.py",
+            "interactiveTerminal": false
+        }
+    ]
+}
