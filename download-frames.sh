@@ -28,7 +28,8 @@ cd ..
 mkdir audio
 cd audio
 
-ffmpeg -i ../$FILE_NAME -vn bad-apple-audio.mp3
-ffmpeg -i ../$FILE_NAME -vn bad-apple-audio.ogg
+# ffmpeg -i ../$FILE_NAME -vn bad-apple-audio.mp3
+# ffmpeg -i ../$FILE_NAME -vn bad-apple-audio.ogg
+ffmpeg -i ../$FILE_NAME -vn bad-apple-audio.wav
 
 rm ../$FILE_NAME
