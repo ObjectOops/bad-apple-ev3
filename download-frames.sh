@@ -22,7 +22,7 @@ youtube-dl -f mp4 -o $FILE_NAME $VIDEO
 mkdir frames
 cd frames
 
-ffmpeg -r $OUTPUT_FPS -i ../$FILE_NAME -s $OUTPUT_DIMENSIONS "frame%0${OUTPUT_DIGITS}d.png"
+ffmpeg -r $OUTPUT_FPS -i ../$FILE_NAME -s $OUTPUT_DIMENSIONS -vf format=gray "frame%0${OUTPUT_DIGITS}d.png"
 
 cd ..
 mkdir audio
