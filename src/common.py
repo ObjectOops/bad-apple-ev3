@@ -1,5 +1,3 @@
-#!/usr/bin/env pybricks-micropython
-
 """
 The maximum fixed FPS is somewhere around 13 frames per second.
 Using the variable framerate display function might achieve slightly higher results.
@@ -31,9 +29,6 @@ ev3.light.off()
 
 done = False
 
-def play_audio():
-    ev3.speaker.play_file(audio_directory + "bad-apple-audio.wav")
-
 # Frames are loaded one by one since there's a tough memory limit 
 # and the TI am1808 ARM microprocessor is single core anyways.
 # The C-function that the Pybricks API binds to forces one to use PNGs.
@@ -44,9 +39,9 @@ def play_video_fixed_fps(frames):
     print("Using fixed FPS.")
     global done
     dt = int(video_length / frame_count * fps_reduction - dt_offset)
-    for i in frames:
+    for frame in frames:
         t1 = ticks_us()
-        ev3.screen.load_image(i)
+        ev3.screen.load_image(frame)
         t2 = ticks_us()
         sleep_us(dt - (t2 - t1))
         # print(dt - (t2 - t1))
@@ -61,7 +56,7 @@ def play_video_variable_fps():
         # If a runtime error occurs because the frames went slightly too far, then so be it.
         ev3.screen.load_image("frame%04d.png" % (max(0, ticks_us() - start) / video_length * frame_count + 1))
 
-if __name__ == "__main__":
+def play(audio_function: function):
     os.chdir(frame_directory)
 
     frames = ["frame%04d.png" % (i * fps_reduction) for i in range(1, int((frame_count + 1) / fps_reduction))]
@@ -72,7 +67,7 @@ if __name__ == "__main__":
         video_thread = Thread(target=play_video_fixed_fps, args=[frames])
     video_thread.start()
 
-    play_audio()
+    audio_function()
 
     if variable_fps:
         done = True
