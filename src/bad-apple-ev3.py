@@ -35,7 +35,7 @@ done = False
 def play_audio():
     ev3.speaker.play_file(audio_directory + "bad-apple-audio.wav")
 
-def play_video():
+def play_video(frames):
     # Frames are loaded one by one since there's a tough memory limit 
     # and the TI am1808 ARM microprocessor is single core anyways.
     # The C-function that the Pybricks API binds to forces one to use PNGs.
@@ -43,9 +43,9 @@ def play_video():
     # and will probably be too slow.
     global done
     dt = int(video_length / frame_count * fps_reduction - dt_offset)
-    for i in range(1, (frame_count + 1) / fps_reduction):
+    for i in frames:
         t1 = ticks_us()
-        ev3.screen.load_image("frame%04d.png" % (i * fps_reduction))
+        ev3.screen.load_image(i)
         t2 = ticks_us()
         sleep_us(dt - (t2 - t1))
         # print(dt - (t2 - t1))
@@ -54,7 +54,9 @@ def play_video():
 if __name__ == "__main__":
     os.chdir(frame_directory)
 
-    video_thread = Thread(target=play_video)
+    frames = ["frame%04d.png" % (i * fps_reduction) for i in range(1, int((frame_count + 1) / fps_reduction))]
+
+    video_thread = Thread(target=play_video, args=[frames])
     video_thread.start()
 
     play_audio()
