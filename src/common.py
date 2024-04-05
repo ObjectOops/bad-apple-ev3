@@ -10,9 +10,9 @@ from time import ticks_us, sleep_us
 from pybricks.media.ev3dev import Image
 from pybricks.hubs import EV3Brick
 
-asset_directory = "/home/robot/bad-apple-ev3/assets/"
-frame_directory = asset_directory + "frames/"
-audio_directory = asset_directory + "audio/"
+asset_directory = "/home/robot/bad-apple-ev3/assets"
+frame_directory = os.path.join(asset_directory, "frames")
+audio_directory = os.path.join(asset_directory, "audio")
 video_length = (3 * 60 + 39 + 0.08) * 1_000_000
 variable_fps = True
 frame_count = 6572 # 30 FPS max.

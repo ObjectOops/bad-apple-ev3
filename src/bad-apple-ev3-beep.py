@@ -19,6 +19,8 @@ def play_audio():
                 notes.append([float(j) for j in lines.split(' ')])
             instruments.append([i, 0, notes])
     start = total = ticks_us()
+    freq = 0
+    dur = 0
     while True:
         t = total - start
         if t >= video_length:
@@ -29,8 +31,6 @@ def play_audio():
         while priority[0] < t:
             priority_idx += 1
             priority = instrument_priorities[priority_idx]
-        freq = 0
-        dur = 0
         for instrument_idx in priority[1]:
             instrument = instruments[instrument_idx]
             notes = instrument[2]
