@@ -1,5 +1,6 @@
 # bad-apple-ev3
-My attempt at playing [Bad Apple!!](https://en.wikipedia.org/wiki/Bad_Apple!!#Use_as_a_graphical_and_audio_test) on LEGO MINDSTORMS EV3.
+My attempt at playing [Bad Apple!!](https://en.wikipedia.org/wiki/Bad_Apple!!#Use_as_a_graphical_and_audio_test) on LEGO MINDSTORMS EV3.  
+[Click here to watch the video.](https://objectoops.github.io/bad-apple-ev3/)
 
 ![Thumbnail](./docs/bad_apple_ev3_frame.jpg)
 
